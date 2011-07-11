@@ -8,7 +8,7 @@ To install, simply add it to your gemfile:
 For now, it's a single tweak to speed up developing on Rails 3.1 w/ asset packaging:
 
 ## Asset Packaging
-Rails 3.1 integrated [Sprockets](getsprockets.org) as its asset packager.  Unfortunately, since the asset packager is
+Rails 3.1 integrated [Sprockets](http://getsprockets.org/) as its asset packager.  Unfortunately, since the asset packager is
 mounted using the traditional Rails dispatching infrastructure, it's hidden behind the Rails autoloader (unloader).
 
 This tweak simply disables autoloading for requests that are routed to Sprockets (specifically, to a
