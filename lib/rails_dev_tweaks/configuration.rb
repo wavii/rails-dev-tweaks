@@ -1,5 +1,7 @@
 class RailsDevTweaks::Configuration
 
+  attr_reader :granular_autoload_config
+
   def initialize
     @granular_autoload_config = GranularAutoloadConfiguration.new
 
@@ -36,7 +38,7 @@ class RailsDevTweaks::Configuration
 
       # Simple matcher blocks
       if args.size == 0 && block.present?
-        @rules << [rule_type, block]
+        @rules.unshift [rule_type, block]
         return self
       end
 
@@ -52,9 +54,22 @@ class RailsDevTweaks::Configuration
 
       # Named matcher
       matcher_class = "RailsDevTweaks::GranularAutoload::Matchers::#{args[0].to_s.classify}Matcher".constantize
-      @rules << [rule_type, matcher_class.new(*args[1..-1])]
+      matcher       = matcher_class.new(*args[1..-1])
+      raise TypeError, "Matchers must respond to :call. #{matcher.inspect} does not." unless matcher.respond_to? :call
+
+      @rules.unshift [rule_type, matcher]
 
       self
+    end
+
+    def should_reload?(request)
+      @rules.each do |rule_type, callable|
+        return rule_type == :keep if callable.call(request)
+      end
+
+      # We default to reloading to preserve behavior, but we should never get to this unless the configuration is
+      # all sorts of horked.
+      true
     end
 
   end
