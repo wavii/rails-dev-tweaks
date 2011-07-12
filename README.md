@@ -16,10 +16,9 @@ kinds of requests are autoloaded.
 
 However, why should you use request-based autoload control instead of smart autoloaders that check file modification
 times, such as [rails-dev-boost](https://github.com/thedarkone/rails-dev-boost)?  The primary worry with smart
-autoloaders is that they have an extremely difficult time tracking all dependencies of a particular constant.  You can
-end up with extremely confusing bugs, usually because you're accidentally hanging on to instances of a class that was
-reloaded, rather than instantiating new instances with the updated copy of that class.  Request-based autoloading
-hopefully avoids confusing and time-consuming bugs like that.
+autoloaders is that they have an extremely difficult time tracking all dependencies of a particular constant.  This can
+result in extremely confusing and difficult to debug issues; Theoretically, request-based autoloading should be a bit
+less finicky.
 
 You can specify autoload rules for your app via a configuration block in your application or environment configuration.
 These rules are specified via exclusion (`skip`) and inclusion (`keep`).  Rules defined later override those defined
