@@ -9,6 +9,7 @@ class RailsDevTweaks::Configuration
     self.autoload_rules do
       keep :all
 
+      skip '/favicon.ico'
       skip :assets
       skip :xhr
       keep :forced

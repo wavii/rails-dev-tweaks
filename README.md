@@ -43,6 +43,7 @@ The default autoload rules should cover most development patterns:
     config.dev_tweaks.autoload_rules do
       keep :all
 
+      skip '/favicon.ico'
       skip :assets
       skip :xhr
       keep :forced
