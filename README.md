@@ -34,8 +34,8 @@ before.
       # But include routes that include smerch
       keep /smerch/
 
-      # Use a callable if you want to inspect the request
-      skip lambda {|request| request.post?}
+      # Use a block if you want to inspect the request
+      skip {|request| request.post?}
     end
 
 The default autoload rules should cover most development patterns:
