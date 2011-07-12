@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ['Wavii, Inc.']
   s.email       = ['info@wavii.com']
   s.homepage    = 'http://wavii.com/'
-  s.summary     = %q{Speed up your Rails (3.1+) development environment.}
-  s.description = %q{A collection of tweaks and monkey patches to improve performance of Rails dev environments.}
+  s.summary     = %q{A collection of tweaks to improve your Rails (3.1+) development experience.}
+  s.description = %q{A collection of tweaks to improve your Rails (3.1+) development experience.}
 
   s.rubyforge_project = 'rails-dev-tweaks'
 
