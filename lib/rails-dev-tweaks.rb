@@ -9,6 +9,6 @@ end
 ActiveSupport::Dependencies.autoload_paths      << RailsDevTweaks::LIB_PATH
 ActiveSupport::Dependencies.autoload_once_paths << RailsDevTweaks::LIB_PATH # But don't allow *auto-reloading*!
 
-# Reference the middleware to force it to load
-RailsDevTweaks::BetterReloaderMiddleware
+# Reference the railtie to force it to load
+RailsDevTweaks::Railtie
 
