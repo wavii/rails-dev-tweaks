@@ -80,7 +80,7 @@ parameter (GET or POST), or that has the 'Force-Autoload' header set to somethin
 If you are live-debugging jQuery ajax requests, this helpful snippet will turn on forced autoloading for the remainder
 of the browser's session:
 
-    $.ajaxSetup({"beforeSend": function(xhr) { xhr.setRequestHeader("Force-Autoload", "true") })
+    $.ajaxSetup({"beforeSend": function(xhr) {xhr.setRequestHeader("Force-Autoload", "true")} })
 
 ### :path
 Matches the path of the request via a regular expression.
