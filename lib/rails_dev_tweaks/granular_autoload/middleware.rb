@@ -2,22 +2,36 @@
 # content requests.
 class RailsDevTweaks::GranularAutoload::Middleware
 
+  # Don't cleanup before the very first request
+  class << self
+    attr_writer :processed_a_request
+    def processed_a_request?
+      @processed_a_request
+    end
+  end
+
   def initialize(app)
-    @app      = app
-    @reloader = ActionDispatch::Reloader.new(app)
+    @app = app
   end
 
   def call(env)
-    request = ActionDispatch::Request.new(env)
+    request = ActionDispatch::Request.new(env.dup)
 
     # reload, or no?
     if Rails.application.config.dev_tweaks.granular_autoload_config.should_reload?(request)
-      return @reloader.call(env)
+      # Confusingly, we flip the request prepare/cleanup life cycle around so that we're only cleaning up on those
+      # requests that want to be reloaded
+      if self.class.processed_a_request? # No-op if this is the first request.  The initializers take care of that one.
+        ActionDispatch::Reloader.cleanup!
+        ActionDispatch::Reloader.prepare!
+      end
+      self.class.processed_a_request = true
+
+    else
+      Rails.logger.info 'RailsDevTweaks: Skipping ActionDispatch::Reloader hooks for this request.'
     end
 
-    Rails.logger.info 'RailsDevTweaks: Skipping ActionDispatch::Reloader middleware for this request.'
-    @app.call(env)
+    return @app.call(env)
   end
-
 end
 
