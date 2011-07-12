@@ -8,6 +8,10 @@ class RailsDevTweaks::Configuration
     # And set our defaults
     self.autoload_rules do
       keep :all
+
+      skip :assets
+      skip :xhr
+      keep :forced
     end
   end
 

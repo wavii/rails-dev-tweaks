@@ -55,7 +55,7 @@ are not set in stone!
 Named matchers are classes defined under `RailsDevTweaks::GranularAutoload::Matchers::` and simply define a `call`
 method that is given a `ActionDispatch::Request` and returns true/false on whether that request matches. Match names
 are converted into a module name via `"#{name.to_s.classify}Matcher"`.  E.g. `:assets` will specify the
-`RailsDevTweaks::GranularAutoload::Matchers::AssetsMatcher`.
+`RailsDevTweaks::GranularAutoload::Matchers::AssetMatcher`.
 
 Any additional arguments given to a `skip` or `keep` call will be passed as initializer arguments to the matcher.
 
