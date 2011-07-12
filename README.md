@@ -3,7 +3,7 @@ A collection of tweaks to improve your Rails (3.1+) development experience.
 
 To install, simply add it to your gemfile:
 
-    gem 'rails-dev-tweaks', '~> 0.2.1'
+    gem 'rails-dev-tweaks', '~> 0.3.0'
 
 At the moment, the current tweaks center around speeding up requests by giving granular control over which requests
 cause the Rails autoloader to kick in:
@@ -45,12 +45,8 @@ The default autoload rules should cover most development patterns:
 
       skip '/favicon.ico'
       skip :assets
-      skip :xhr
       keep :forced
     end
-
-If you find you're turning certain matchers on and off for most of your projects, be vocal about it!  These defaults
-are not set in stone!
 
 ## Named Matchers
 Named matchers are classes defined under RailsDevTweaks::GranularAutoload::Matchers:: and simply define a call
