@@ -11,6 +11,7 @@ class RailsDevTweaks::Configuration
 
       skip '/favicon.ico'
       skip :assets
+      skip :xhr
       keep :forced
     end
   end

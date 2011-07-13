@@ -3,23 +3,27 @@ A collection of tweaks to improve your Rails (3.1+) development experience.
 
 To install, simply add it to your gemfile:
 
-    gem 'rails-dev-tweaks', '~> 0.3.1'
+    gem 'rails-dev-tweaks', '~> 0.4.0'
 
 At the moment, the current tweaks center around speeding up requests by giving granular control over which requests
-cause the Rails autoloader to kick in:
+cause the Rails reloader to kick in.
+
+
+## Intended Usage
+This gem is intended to provide a default configuration that covers most rails apps.  You should be aware of some of
+the more imposing defaults, in case they don't jive with your workflow.  Important points of note:
+
+* _All_ asset requests _will not_ reload your app's code.  This is probably only a problem if you are using custom sass
+  functions, or otherwise referencing your app from within assets.
+
+* _All_ XHR requests _will not_ reload your app's code until you make a regular content request!  The assumption is
+  that you generally do not debug XHR responses without reloading the base page first.
+
+If any of these points don't work out for you, don't fret!  You can override the defaults with some simple
+configuration tweaks to your environment.  Read on:
 
 
 # Granular Autoload
-Rails' autoloading facility is a wonderful help for development mode, but sometimes it's a little overkill and ends up
-hampering your rate of iteration while developing a Rails app.  rails-dev-tweaks introduces granular control over which
-kinds of requests are autoloaded.
-
-However, why should you use request-based autoload control instead of smart autoloaders that check file modification
-times, such as [rails-dev-boost](https://github.com/thedarkone/rails-dev-boost)?  The primary worry with smart
-autoloaders is that they have an extremely difficult time tracking all dependencies of a particular constant.  This can
-result in extremely confusing and difficult to debug issues; Theoretically, request-based autoloading should be a bit
-less finicky.
-
 You can specify autoload rules for your app via a configuration block in your application or environment configuration.
 These rules are specified via exclusion (`skip`) and inclusion (`keep`).  Rules defined later override those defined
 before.
@@ -44,6 +48,7 @@ The default autoload rules should cover most development patterns:
 
       skip '/favicon.ico'
       skip :assets
+      skip :xhr
       keep :forced
     end
 
@@ -63,10 +68,6 @@ Rails 3.1 integrated [Sprockets](http://getsprockets.org/) as its asset packager
 packager is mounted using the traditional Rails dispatching infrastructure, it's hidden behind the Rails autoloader
 (unloader). This matcher will match any requests that are routed to Sprockets (specifically any mounted
 Sprockets::Environment instance).
-
-_The downside_ to this matcher is that your Rails environment won't reload until you make a regular request to the dev
-server (which should be your usual request pattern, anyway).  Assets still reload properly (unless you're referencing
-your application's Ruby code).
 
 ### :forced
 To aid in live-debugging when you need to, this matcher will match any request that has `force_autoload` set as a
