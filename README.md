@@ -9,7 +9,7 @@ At the moment, the current tweaks center around speeding up requests by giving g
 cause the Rails reloader to kick in.
 
 
-## Intended Usage
+## Intended Usage (and Caveats)
 This gem is intended to provide a default configuration that covers most rails apps.  You should be aware of some of
 the more imposing defaults, in case they don't jive with your workflow.  Important points of note:
 
