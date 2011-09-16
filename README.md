@@ -67,7 +67,7 @@ Matches every request passed to it.
 Rails 3.1 integrated [Sprockets](http://getsprockets.org/) as its asset packager.  Unfortunately, since the asset
 packager is mounted using the traditional Rails dispatching infrastructure, it's hidden behind the Rails autoloader
 (unloader). This matcher will match any requests that are routed to Sprockets (specifically any mounted
-Sprockets::Environment instance).
+Sprockets::Base instance).
 
 ### :forced
 To aid in live-debugging when you need to, this matcher will match any request that has `force_autoload` set as a
