@@ -22,7 +22,7 @@ class RailsDevTweaks::GranularAutoload::Matchers::AssetMatcher
     end
 
     # what do we have?
-    main_mount.kind_of? Sprockets::Environment
+    main_mount.kind_of? Sprockets::Base
   end
 
 end
