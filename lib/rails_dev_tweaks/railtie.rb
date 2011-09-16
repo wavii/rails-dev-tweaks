@@ -11,4 +11,3 @@ class RailsDevTweaks::Railtie < Rails::Railtie
   end
 
 end
-

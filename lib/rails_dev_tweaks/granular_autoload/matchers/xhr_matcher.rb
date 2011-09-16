@@ -5,4 +5,3 @@ class RailsDevTweaks::GranularAutoload::Matchers::XhrMatcher
   end
 
 end
-

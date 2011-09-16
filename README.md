@@ -95,4 +95,3 @@ requests, and are instead refreshing the page that kicks them off before running
 rails-dev-tweaks is MIT licensed by Wavii, Inc.  http://wavii.com
 
 See the accompanying file, `MIT-LICENSE`, for the full text.
-

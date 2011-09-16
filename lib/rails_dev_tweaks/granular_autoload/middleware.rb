@@ -34,4 +34,3 @@ class RailsDevTweaks::GranularAutoload::Middleware
     return @app.call(env)
   end
 end
-

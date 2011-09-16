@@ -26,4 +26,3 @@ class RailsDevTweaks::GranularAutoload::Matchers::AssetMatcher
   end
 
 end
-

@@ -9,4 +9,3 @@ class RailsDevTweaks::GranularAutoload::Matchers::PathMatcher
   end
 
 end
-

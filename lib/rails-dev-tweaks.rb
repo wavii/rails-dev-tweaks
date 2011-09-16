@@ -11,4 +11,3 @@ ActiveSupport::Dependencies.autoload_once_paths << RailsDevTweaks::LIB_PATH # Bu
 
 # Reference the railtie to force it to load
 RailsDevTweaks::Railtie
-

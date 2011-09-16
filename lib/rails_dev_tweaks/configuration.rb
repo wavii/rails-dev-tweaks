@@ -80,4 +80,3 @@ class RailsDevTweaks::Configuration
   end
 
 end
-
