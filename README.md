@@ -3,7 +3,7 @@ A collection of tweaks to improve your Rails (3.1+) development experience.
 
 To install, simply add it to your gemfile:
 
-    gem 'rails-dev-tweaks', '~> 0.5.0'
+    gem 'rails-dev-tweaks', '~> 0.5.1'
 
 At the moment, the current tweaks center around speeding up requests by giving granular control over which requests
 cause the Rails reloader to kick in.
