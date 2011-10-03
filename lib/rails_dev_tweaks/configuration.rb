@@ -1,8 +1,14 @@
 class RailsDevTweaks::Configuration
 
+  # By default, we log a notice on each request that has its to_prepare hooks skipped, you can
+  # disable that if you choose!
+  attr_accessor :log_autoload_notice
+
   attr_reader :granular_autoload_config
 
   def initialize
+    @log_autoload_notice = true
+
     @granular_autoload_config = GranularAutoloadConfiguration.new
 
     # And set our defaults

@@ -27,7 +27,7 @@ class RailsDevTweaks::GranularAutoload::Middleware
       end
       self.class.processed_a_request = true
 
-    else
+    elsif Rails.application.config.dev_tweaks.log_autoload_notice
       Rails.logger.info 'RailsDevTweaks: Skipping ActionDispatch::Reloader hooks for this request.'
     end
 

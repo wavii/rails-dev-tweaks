@@ -52,6 +52,13 @@ The default autoload rules should cover most development patterns:
       keep :forced
     end
 
+By default, every request that skips the autoload hooks will generate an additional log line saying
+so in an effort to be transparent about what is going on.  If you prefer, you can disable that log
+message to keep things a bit more tidy in your logs:
+
+    config.dev_tweaks.log_autoload_notice = false
+
+
 ## Named Matchers
 Named matchers are classes defined under RailsDevTweaks::GranularAutoload::Matchers:: and simply define a call
 method that is given a ActionDispatch::Request and returns true/false on whether that request matches. Match names
