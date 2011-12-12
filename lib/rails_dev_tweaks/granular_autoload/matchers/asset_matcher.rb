@@ -1,7 +1,7 @@
 class RailsDevTweaks::GranularAutoload::Matchers::AssetMatcher
 
   def call(request)
-    main_mount = request.headers['action_dispatch.routes'].set.recognize(request)
+    main_mount = request.headers['action_dispatch.routes'].set.dup.recognize(request)
 
     # Unwind until we have an actual app
     while main_mount != nil
