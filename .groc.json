@@ -1,0 +1,4 @@
+{
+  "globs": ["lib/**/*.rb", "README.md"],
+  "github": true
+}
