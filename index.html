@@ -1,0 +1,117 @@
+<!DOCTYPE html><html lang="en"><head><title>index</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="index"><meta name="groc-project-path" content="README.md"><meta name="groc-github-url" content="https://github.com/wavii/rails-dev-tweaks"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="document"><div class="segment"><div class="comments"><div class="wrapper"><h1 id="rails-dev-tweaks">rails-dev-tweaks</h1>
+
+<p>A collection of tweaks to improve your Rails (3.1+) development experience.</p>
+
+<p>To install, simply add it to your gemfile:</p>
+
+<pre><code>gem 'rails-dev-tweaks', '~&gt; 0.5.2'
+</code></pre>
+
+<p>At the moment, the current tweaks center around speeding up requests by giving granular control over which requests
+cause the Rails reloader to kick in.</p>
+
+<h2 id="intended-usage-and-caveats">Intended Usage (and Caveats)</h2>
+
+<p>This gem is intended to provide a default configuration that covers most rails apps.  You should be aware of some of
+the more imposing defaults, in case they don't jive with your workflow.  Important points of note:</p>
+
+<ul>
+<li><p><em>All</em> asset requests <em>will not</em> reload your app's code.  This is probably only a problem if you are using custom sass
+functions, or otherwise referencing your app from within assets.</p></li>
+<li><p><em>All</em> XHR requests <em>will not</em> reload your app's code until you make a regular content request!  The assumption is
+that you generally do not debug XHR responses without reloading the base page first.</p></li>
+</ul>
+
+<p>If any of these points don't work out for you, don't fret!  You can override the defaults with some simple
+configuration tweaks to your environment.  Read on:</p>
+
+<h1 id="granular-autoload">Granular Autoload</h1>
+
+<p>You can specify autoload rules for your app via a configuration block in your application or environment configuration.
+These rules are specified via exclusion (<code>skip</code>) and inclusion (<code>keep</code>).  Rules defined later override those defined
+before.</p>
+
+<pre><code>config.dev_tweaks.autoload_rules do
+  # You can used named matchers (see below).  This particular matcher effectively clears any default matchers
+  keep :all
+
+  # Exclude all requests that begin with /search
+  skip '/search'
+  # But include routes that include smerch
+  keep /smerch/
+
+  # Use a block if you want to inspect the request
+  skip {|request| request.post?}
+end
+</code></pre>
+
+<p>The default autoload rules should cover most development patterns:</p>
+
+<pre><code>config.dev_tweaks.autoload_rules do
+  keep :all
+
+  skip '/favicon.ico'
+  skip :assets
+  skip :xhr
+  keep :forced
+end
+</code></pre>
+
+<p>By default, every request that skips the autoload hooks will generate an additional log line saying
+so in an effort to be transparent about what is going on.  If you prefer, you can disable that log
+message to keep things a bit more tidy in your logs:</p>
+
+<pre><code>config.dev_tweaks.log_autoload_notice = false
+</code></pre>
+
+<h2 id="named-matchers">Named Matchers</h2>
+
+<p>Named matchers are classes defined under RailsDevTweaks::GranularAutoload::Matchers:: and simply define a call
+method that is given a ActionDispatch::Request and returns true/false on whether that request matches. Match names
+are converted into a module name via "#{name.to_s.classify}Matcher".  E.g. :assets will specify the
+RailsDevTweaks::GranularAutoload::Matchers::AssetMatcher.</p>
+
+<p>Any additional arguments given to a <code>skip</code> or <code>keep</code> call will be passed as initializer arguments to the matcher.</p>
+
+<h3 id="all">:all</h3>
+
+<p>Matches every request passed to it.</p>
+
+<h3 id="assets">:assets</h3>
+
+<p>Rails 3.1 integrated <a href="http://getsprockets.org/">Sprockets</a> as its asset packager.  Unfortunately, since the asset
+packager is mounted using the traditional Rails dispatching infrastructure, it's hidden behind the Rails autoloader
+(unloader). This matcher will match any requests that are routed to Sprockets (specifically any mounted
+Sprockets::Base instance).</p>
+
+<h3 id="forced">:forced</h3>
+
+<p>To aid in live-debugging when you need to, this matcher will match any request that has <code>force_autoload</code> set as a
+parameter (GET or POST), or that has the <code>Force-Autoload</code> header set to something.</p>
+
+<p>If you are live-debugging jQuery ajax requests, this helpful snippet will turn on forced autoloading for the remainder
+of the browser's session:</p>
+
+<pre><code>$.ajaxSetup({"beforeSend": function(xhr) {xhr.setRequestHeader("Force-Autoload", "true")} })
+</code></pre>
+
+<h3 id="path">:path</h3>
+
+<p>Matches the path of the request via a regular expression.</p>
+
+<pre><code>keep :path, /thing/ # Match any request with "thing" in the path.
+</code></pre>
+
+<p>Note that <code>keep '/stuff'</code> is just shorthand for <code>keep :path, /^\/stuff/</code>.  Similarly, <code>keep /thing/</code> is shorthand for
+<code>keep :path, /thing/</code></p>
+
+<h3 id="xhr">:xhr</h3>
+
+<p>Matches any XHR request (via request.xhr?).  The assumption here is that you generally don't live-debug your XHR
+requests, and are instead refreshing the page that kicks them off before running against new response code.</p>
+
+<h1 id="license">License</h1>
+
+<p>rails-dev-tweaks is MIT licensed by Wavii, Inc.  http://wavii.com</p>
+
+<p>See the accompanying file, <code>MIT-LICENSE</code>, for the full text.</p></div></div></div></div></body></html>

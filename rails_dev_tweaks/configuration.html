@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="en"><head><title>rails_dev_tweaks/configuration</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="rails_dev_tweaks/configuration"><meta name="groc-project-path" content="lib/rails_dev_tweaks/configuration.rb"><meta name="groc-github-url" content="https://github.com/wavii/rails-dev-tweaks"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="k">class</span> <span class="nc">RailsDevTweaks</span><span class="o">::</span><span class="no">Configuration</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>By default, we log a notice on each request that has its to_prepare hooks skipped, you can
+disable that if you choose!</p></div></div><div class="code"><div class="wrapper">  <span class="kp">attr_accessor</span> <span class="ss">:log_autoload_notice</span>
+
+  <span class="kp">attr_reader</span> <span class="ss">:granular_autoload_config</span>
+
+  <span class="k">def</span> <span class="nf">initialize</span>
+    <span class="vi">@log_autoload_notice</span> <span class="o">=</span> <span class="kp">true</span>
+
+    <span class="vi">@granular_autoload_config</span> <span class="o">=</span> <span class="no">GranularAutoloadConfiguration</span><span class="o">.</span><span class="n">new</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>And set our defaults</p></div></div><div class="code"><div class="wrapper">    <span class="nb">self</span><span class="o">.</span><span class="n">autoload_rules</span> <span class="k">do</span>
+      <span class="n">keep</span> <span class="ss">:all</span>
+
+      <span class="n">skip</span> <span class="s1">&#39;/favicon.ico&#39;</span>
+      <span class="n">skip</span> <span class="ss">:assets</span>
+      <span class="n">skip</span> <span class="ss">:xhr</span>
+      <span class="n">keep</span> <span class="ss">:forced</span>
+    <span class="k">end</span>
+  <span class="k">end</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Takes a block that configures the granular autoloader's rules.</p></div></div><div class="code"><div class="wrapper">  <span class="k">def</span> <span class="nf">autoload_rules</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+    <span class="vi">@granular_autoload_config</span><span class="o">.</span><span class="n">instance_eval</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="k">class</span> <span class="nc">GranularAutoloadConfiguration</span>
+
+    <span class="k">def</span> <span class="nf">initialize</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Each rule is a simple pair: [:skip, callable], [:keep, callable], etc.</p></div></div><div class="code"><div class="wrapper">      <span class="vi">@rules</span> <span class="o">=</span> <span class="o">[]</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">keep</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+      <span class="nb">self</span><span class="o">.</span><span class="n">append_rule</span><span class="p">(</span><span class="ss">:keep</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">skip</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+      <span class="nb">self</span><span class="o">.</span><span class="n">append_rule</span><span class="p">(</span><span class="ss">:skip</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">append_rule</span><span class="p">(</span><span class="n">rule_type</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+      <span class="k">unless</span> <span class="n">rule_type</span> <span class="o">==</span> <span class="ss">:skip</span> <span class="o">||</span> <span class="n">rule_type</span> <span class="o">==</span> <span class="ss">:keep</span>
+        <span class="k">raise</span> <span class="no">TypeError</span><span class="p">,</span> <span class="s2">&quot;Rule must be :skip or :keep.  Got: </span><span class="si">#{</span><span class="n">rule_type</span><span class="o">.</span><span class="n">inspect</span><span class="si">}</span><span class="s2">&quot;</span>
+      <span class="k">end</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Simple matcher blocks</p></div></div><div class="code"><div class="wrapper">      <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">block</span><span class="o">.</span><span class="n">present?</span>
+        <span class="vi">@rules</span><span class="o">.</span><span class="n">unshift</span> <span class="o">[</span><span class="n">rule_type</span><span class="p">,</span> <span class="n">block</span><span class="o">]</span>
+        <span class="k">return</span> <span class="nb">self</span>
+      <span class="k">end</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>String match shorthand</p></div></div><div class="code"><div class="wrapper">      <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="sr">/^</span><span class="si">#{</span><span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="si">}</span><span class="sr">/</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="n">kind_of?</span><span class="p">(</span><span class="nb">String</span><span class="p">)</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Regex match shorthand</p></div></div><div class="code"><div class="wrapper">      <span class="n">args</span> <span class="o">=</span> <span class="o">[</span><span class="ss">:path</span><span class="p">,</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]]</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="n">kind_of?</span><span class="p">(</span><span class="no">Regexp</span><span class="p">)</span>
+
+      <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">block</span><span class="o">.</span><span class="n">blank?</span>
+        <span class="k">raise</span> <span class="no">TypeError</span><span class="p">,</span> <span class="s1">&#39;Cannot process autoload rule as specified.  Expecting a named matcher (symbol), path prefix (string) or block&#39;</span>
+      <span class="k">end</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Named matcher</p></div></div><div class="code"><div class="wrapper">      <span class="n">matcher_class</span> <span class="o">=</span> <span class="s2">&quot;RailsDevTweaks::GranularAutoload::Matchers::</span><span class="si">#{</span><span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="n">to_s</span><span class="o">.</span><span class="n">classify</span><span class="si">}</span><span class="s2">Matcher&quot;</span><span class="o">.</span><span class="n">constantize</span>
+      <span class="n">matcher</span>       <span class="o">=</span> <span class="n">matcher_class</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="o">[</span><span class="mi">1</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span><span class="p">)</span>
+      <span class="k">raise</span> <span class="no">TypeError</span><span class="p">,</span> <span class="s2">&quot;Matchers must respond to :call. </span><span class="si">#{</span><span class="n">matcher</span><span class="o">.</span><span class="n">inspect</span><span class="si">}</span><span class="s2"> does not.&quot;</span> <span class="k">unless</span> <span class="n">matcher</span><span class="o">.</span><span class="n">respond_to?</span> <span class="ss">:call</span>
+
+      <span class="vi">@rules</span><span class="o">.</span><span class="n">unshift</span> <span class="o">[</span><span class="n">rule_type</span><span class="p">,</span> <span class="n">matcher</span><span class="o">]</span>
+
+      <span class="nb">self</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">should_reload?</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+      <span class="vi">@rules</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">rule_type</span><span class="p">,</span> <span class="n">callable</span><span class="o">|</span>
+        <span class="k">return</span> <span class="n">rule_type</span> <span class="o">==</span> <span class="ss">:keep</span> <span class="k">if</span> <span class="n">callable</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+      <span class="k">end</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>We default to reloading to preserve behavior, but we should never get to this unless the configuration is
+all sorts of horked.</p></div></div><div class="code"><div class="wrapper">      <span class="kp">true</span>
+    <span class="k">end</span>
+
+  <span class="k">end</span>
+
+<span class="k">end</span></div></div></div></div></body></html>
