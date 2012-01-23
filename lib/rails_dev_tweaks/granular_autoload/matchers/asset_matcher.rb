@@ -5,6 +5,7 @@ class RailsDevTweaks::GranularAutoload::Matchers::AssetMatcher
       request.headers['action_dispatch.routes'].router.recognize(request) do |route|
         return true if route.app.is_a?(Sprockets::Base)
       end
+      false
     end
   else
     def call(request)
