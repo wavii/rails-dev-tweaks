@@ -14,7 +14,7 @@ class RailsDevTweaks::GranularAutoload::Matchers::AssetMatcher
   end
 
   def journey_find_app(router, request)
-    router.recognize(request) do |route|
+    router.recognize(request) do |route, *args|
       return route.app
     end
   end
