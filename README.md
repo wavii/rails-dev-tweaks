@@ -5,8 +5,7 @@ To install, simply add it to your gemfile:
 
     gem 'rails-dev-tweaks', '~> 0.6.1'
 
-At the moment, the current tweaks center around speeding up requests by giving granular control over which requests
-cause the Rails reloader to kick in.
+And review the following section to make sure that `rails-dev-tweaks` is configured the way you expect:
 
 
 ## Intended Usage (and Caveats)
@@ -16,7 +15,7 @@ the more imposing defaults, in case they don't jive with your workflow.  Importa
 * _All_ asset requests _will not_ reload your app's code.  This is probably only a problem if you are using custom sass
   functions, or otherwise referencing your app from within assets.
 
-* _All_ XHR requests _will not_ reload your app's code until you make a regular content request!  The assumption is
+* **_All_ XHR requests _will not_ reload your app's code until you make a regular content request!**  The assumption is
   that you generally do not debug XHR responses without reloading the base page first.
 
 If any of these points don't work out for you, don't fret!  You can override the defaults with some simple
