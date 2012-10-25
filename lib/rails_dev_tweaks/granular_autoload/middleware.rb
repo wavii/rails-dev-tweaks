@@ -21,7 +21,9 @@ class RailsDevTweaks::GranularAutoload::Middleware
     if Rails.application.config.dev_tweaks.granular_autoload_config.should_reload?(request)
       # Confusingly, we flip the request prepare/cleanup life cycle around so that we're only cleaning up on those
       # requests that want to be reloaded
-      if self.class.processed_a_request? # No-op if this is the first request.  The initializers take care of that one.
+
+      # No-op if this is the first request.  The initializers take care of that one.
+      if self.class.processed_a_request? && reload_dependencies?
         ActionDispatch::Reloader.cleanup!
         ActionDispatch::Reloader.prepare!
       end
@@ -32,5 +34,15 @@ class RailsDevTweaks::GranularAutoload::Middleware
     end
 
     return @app.call(env)
+  end
+
+  private
+
+  def reload_dependencies?
+    application = Rails.application
+
+    # Rails 3.2 defines reload_dependencies? and it only reloads if reload_dependencies? returns true.
+      (!application.class.method_defined?(:reload_dependencies?) ||
+        application.send(:reload_dependencies?))
   end
 end
