@@ -57,7 +57,6 @@ The default autoload rules should cover most development patterns:
 
       skip '/favicon.ico'
       skip :assets
-      skip :xhr
       keep :forced
     end
 
