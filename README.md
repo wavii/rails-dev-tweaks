@@ -5,7 +5,7 @@ A collection of tweaks to improve your Rails (3.1+) development experience.
 
 To install, simply add it to your gemfile:
 
-    gem 'rails-dev-tweaks', '~> 0.6.1'
+    gem 'rails-dev-tweaks', '~> 1.1'
 
 And review the following section to make sure that `rails-dev-tweaks` is
 configured the way you expect:
