@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'http://wavii.com/'
   s.summary     = %q{A collection of tweaks to improve your Rails (3.1+) development experience.}
   s.description = %q{A collection of tweaks to improve your Rails (3.1+) development experience.}
+  s.license     = 'MIT'
 
   s.rubyforge_project = 'rails-dev-tweaks'
 
